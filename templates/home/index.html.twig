@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Boutique
+{% endblock %}
+
+{% block body %}
+	<div class="container my-5">
+		<h1 class="text-center mb-5" style="color:#a35252;">Bienvenue dans la boutique</h1>
+
+		<div class="row g-4">
+			{% for produit in produits %}
+				<div class="col-12 col-sm-6 col-lg-4">
+					<div class="card product-card h-100 shadow-sm">
+						<img src="{{ produit.imageProduit }}" class="card-img-top" alt="{{ produit.nomProduit }}">
+						<div class="card-body d-flex flex-column">
+							<h5 class="card-title text-center text-dark">{{ produit.nomProduit }}</h5>
+							<p class="card-text text-muted small">
+								{{ produit.descriptionProduit|slice(0, 100) }}
+								{% if produit.descriptionProduit|length > 100 %}...
+								{% endif %}
+							</p>
+							<div class="mt-auto">
+								<p class="fw-bold text-center mb-2" style="color:#b65a5a;">
+									{{ produit.prixProduit }}
+									€
+								</p>
+								{% if produit.stock > 0 %}
+									<p class="text-success text-center">En stock :
+										{{ produit.stock }}</p>
+									<div class="d-flex justify-content-center gap-2">
+										<a href="{{ path('app_voir_produit', {'id': produit.id}) }}" class="btn btn-outline-danger btn-sm rounded-pill px-4">Voir détails</a>
+										<a href="{{ path('app_ajout_panier', {'id': produit.id}) }}" class="btn btn-outline-danger btn-sm rounded-pill px-4">Ajouter au panier</a>
+									</div>
+								{% else %}
+									<p class="text-danger text-center">Rupture de stock</p>
+								{% endif %}
+							</div>
+
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<p class="text-center text-muted">Aucun produit disponible pour le moment.</p>
+			{% endfor %}
+		</div>
+	</div>
+
+{% endblock %}

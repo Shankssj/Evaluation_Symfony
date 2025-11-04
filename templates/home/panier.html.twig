@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Panier{% endblock %}
+
+{% block body %}
+<h1 class="text-center mb-4">Mon Panier</h1>
+
+{% if produits|length == 0 %}
+    <p class="text-center">Votre panier est vide.</p>
+{% else %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% set total = 0 %}
+        {% for produit in produits %}
+            {% set total = total + produit.prixProduit %}
+            <div class="col">
+                <div class="card product-card h-100">
+                    <img src="{{ produit.imageProduit }}" class="card-img-top" alt="{{ produit.nomProduit }}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ produit.nomProduit }}</h5>
+                        <p class="card-text text-truncate">{{ produit.descriptionProduit|length > 100 ? produit.descriptionProduit|slice(0, 100) ~ '...' : produit.descriptionProduit }}</p>
+                        <p class="fw-bold mt-auto mb-2">{{ produit.prixProduit }} €</p>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ path('app_voir_produit', {'id': produit.id}) }}" class="btn btn-outline-danger btn-sm rounded-pill px-3">Détails</a>
+                            <a href="{{ path('app_panier_supprimer', {'id': produit.id}) }}" class="btn btn-rose btn-sm rounded-pill px-3">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-end mt-4">
+        <h4>Total : {{ total }} €</h4>
+        <a href="#" class="btn btn-rose btn-lg mt-2">Valider le panier</a>
+    </div>
+{% endif %}
+{% endblock %}
