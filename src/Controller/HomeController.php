@@ -60,49 +60,49 @@ final class HomeController extends AbstractController
         ]);
     }
 
-    #[Route('/produit/{id}/panier', name: 'app_ajout_panier')]
-    public function addToCart(Produits $produit, EntityManagerInterface $em): RedirectResponse
-    {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+    // #[Route('/produit/{id}/panier', name: 'app_ajout_panier')]
+    // public function addToCart(Produits $produit, EntityManagerInterface $em): RedirectResponse
+    // {
+    //     /** @var \App\Entity\User $user */
+    //     $user = $this->getUser();
 
-        $user->addProduit($produit);
+    //     $user->addProduit($produit);
 
-        $em->persist($user);
-        $em->flush();
+    //     $em->persist($user);
+    //     $em->flush();
 
-        $this->addFlash('success', 'Produit ajouté au panier !');
+    //     $this->addFlash('success', 'Produit ajouté au panier !');
 
-        return $this->redirectToRoute('app_show_panier');
-    }
+    //     return $this->redirectToRoute('app_show_panier');
+    // }
 
-    #[Route('/panier', name: 'app_show_panier')]
-    public function showPanier(): Response
-    {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+    // #[Route('/panier', name: 'app_show_panier')]
+    // public function showPanier(): Response
+    // {
+    //     /** @var \App\Entity\User $user */
+    //     $user = $this->getUser();
 
-        $produits = $user->getProduits();
+    //     $produits = $user->getProduits();
 
-        return $this->render('home/panier.html.twig', [
-            'produits' => $produits,
-        ]);
-    }
+    //     return $this->render('home/panier.html.twig', [
+    //         'produits' => $produits,
+    //     ]);
+    // }
 
-    #[Route('/panier/supprimer/{id}', name: 'app_panier_supprimer')]
-    public function supprimerPanier(Produits $produit, EntityManagerInterface $entityManager): RedirectResponse
-    {
-        /** @var \App\Entity\User $user */
-        $user = $this->getUser();
+    // #[Route('/panier/supprimer/{id}', name: 'app_panier_supprimer')]
+    // public function supprimerPanier(Produits $produit, EntityManagerInterface $entityManager): RedirectResponse
+    // {
+    //     /** @var \App\Entity\User $user */
+    //     $user = $this->getUser();
 
-        $user->removeProduit($produit);
+    //     $user->removeProduit($produit);
 
-        $entityManager->persist($user);
-        $entityManager->flush();
+    //     $entityManager->persist($user);
+    //     $entityManager->flush();
 
-        $this->addFlash('success', 'Produit supprimé du panier.');
+    //     $this->addFlash('success', 'Produit supprimé du panier.');
 
-        return $this->redirectToRoute('app_show_panier');
-    }
+    //     return $this->redirectToRoute('app_show_panier');
+    // }
 
 }

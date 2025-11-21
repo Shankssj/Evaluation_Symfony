@@ -10,7 +10,7 @@
 			<div class="col-12 col-md-6 order-1 order-md-1">
 				<div class="card shadow-sm border-0 product-detail-card">
 					<div class="card-img-wrapper">
-						<img src="{{ produit.imageProduit }}" alt="{{ produit.nomProduit }}" class="product-detail-img">
+						<img src="{{ asset('uploads/images/' ~ produit.imageProduit) }}" alt="{{ produit.nomProduit }}" class="product-detail-img">
 					</div>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 					{% if produit.stock > 0 %}
 						<p class="text-success mb-4">En stock :
 							{{ produit.stock }}</p>
-						<a href="{{ path('app_ajout_panier', {'id': produit.id}) }}" class="btn btn-danger">
+						<a href="{{ path('app_add_panier', {'id': produit.id}) }}" class="btn btn-danger">
 							Ajouter au panier
 						</a>
 					{% endif %}

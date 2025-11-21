@@ -42,15 +42,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $contacts;
 
     /**
-     * @var Collection<int, Produits>
+     * @var Collection<int, Commande>
      */
-    #[ORM\ManyToMany(targetEntity: Produits::class, mappedBy: 'panier')]
-    private Collection $produits;
+    #[ORM\OneToMany(targetEntity: Commande::class, mappedBy: 'user')]
+    private Collection $commandes;
+
+
 
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
-        $this->produits = new ArrayCollection();
+        $this->commandes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -165,29 +167,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Produits>
+     * @return Collection<int, Commande>
      */
-    public function getProduits(): Collection
+    public function getCommandes(): Collection
     {
-        return $this->produits;
+        return $this->commandes;
     }
 
-    public function addProduit(Produits $produit): static
+    public function addCommande(Commande $commande): static
     {
-        if (!$this->produits->contains($produit)) {
-            $this->produits->add($produit);
-            $produit->addPanier($this);
+        if (!$this->commandes->contains($commande)) {
+            $this->commandes->add($commande);
+            $commande->setUser($this);
         }
 
         return $this;
     }
 
-    public function removeProduit(Produits $produit): static
+    public function removeCommande(Commande $commande): static
     {
-        if ($this->produits->removeElement($produit)) {
-            $produit->removePanier($this);
+        if ($this->commandes->removeElement($commande)) {
+            // set the owning side to null (unless already changed)
+            if ($commande->getUser() === $this) {
+                $commande->setUser(null);
+            }
         }
 
         return $this;
     }
+
 }

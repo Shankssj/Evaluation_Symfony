@@ -14,7 +14,7 @@
             {% set total = total + produit.prixProduit %}
             <div class="col">
                 <div class="card product-card h-100">
-                    <img src="{{ produit.imageProduit }}" class="card-img-top" alt="{{ produit.nomProduit }}">
+                    <img src="{{ asset('uploads/images/' ~ produit.imageProduit) }}" class="card-img-top" alt="{{ produit.nomProduit }}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title">{{ produit.nomProduit }}</h5>
                         <p class="card-text text-truncate">{{ produit.descriptionProduit|length > 100 ? produit.descriptionProduit|slice(0, 100) ~ '...' : produit.descriptionProduit }}</p>

@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\Produits;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProduitsType extends AbstractType
@@ -16,8 +18,12 @@ class ProduitsType extends AbstractType
             ->add('description_produit')
             ->add('stock')
             ->add('prix_produit')
-            ->add('image_produit')
-        ;
+            ->add('imageFile', FileType::class, [
+                'label' => 'Image du produit',
+                'mapped' => false,  
+                'required' => false,
+                'data_class' => null, 
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

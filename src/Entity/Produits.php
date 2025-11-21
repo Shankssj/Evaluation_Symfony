@@ -32,14 +32,16 @@ class Produits
     private ?string $image_produit = null;
 
     /**
-     * @var Collection<int, User>
+     * @var Collection<int, CommandeProduit>
      */
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'produits')]
-    private Collection $panier;
+    #[ORM\OneToMany(targetEntity: CommandeProduit::class, mappedBy: 'produit')]
+    private Collection $commandeProduits;
+
+
 
     public function __construct()
     {
-        $this->panier = new ArrayCollection();
+        $this->commandeProduits = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,25 +110,31 @@ class Produits
     }
 
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, CommandeProduit>
      */
-    public function getPanier(): Collection
+    public function getCommandeProduits(): Collection
     {
-        return $this->panier;
+        return $this->commandeProduits;
     }
 
-    public function addPanier(User $panier): static
+    public function addCommandeProduit(CommandeProduit $commandeProduit): static
     {
-        if (!$this->panier->contains($panier)) {
-            $this->panier->add($panier);
+        if (!$this->commandeProduits->contains($commandeProduit)) {
+            $this->commandeProduits->add($commandeProduit);
+            $commandeProduit->setProduit($this);
         }
 
         return $this;
     }
 
-    public function removePanier(User $panier): static
+    public function removeCommandeProduit(CommandeProduit $commandeProduit): static
     {
-        $this->panier->removeElement($panier);
+        if ($this->commandeProduits->removeElement($commandeProduit)) {
+            // set the owning side to null (unless already changed)
+            if ($commandeProduit->getProduit() === $this) {
+                $commandeProduit->setProduit(null);
+            }
+        }
 
         return $this;
     }

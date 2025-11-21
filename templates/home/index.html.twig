@@ -11,7 +11,7 @@
 			{% for produit in produits %}
 				<div class="col-12 col-sm-6 col-lg-4">
 					<div class="card product-card h-100 shadow-sm">
-						<img src="{{ produit.imageProduit }}" class="card-img-top" alt="{{ produit.nomProduit }}">
+						<img src="{{ asset('uploads/images/' ~ produit.imageProduit) }}" class="card-img-top">
 						<div class="card-body d-flex flex-column">
 							<h5 class="card-title text-center text-dark">{{ produit.nomProduit }}</h5>
 							<p class="card-text text-muted small">
@@ -28,8 +28,8 @@
 									<p class="text-success text-center">En stock :
 										{{ produit.stock }}</p>
 									<div class="d-flex justify-content-center gap-2">
-										<a href="{{ path('app_voir_produit', {'id': produit.id}) }}" class="btn btn-outline-danger btn-sm rounded-pill px-4">Voir détails</a>
-										<a href="{{ path('app_ajout_panier', {'id': produit.id}) }}" class="btn btn-outline-danger btn-sm rounded-pill px-4">Ajouter au panier</a>
+										<a href="{{ path('app_voir_produit', {'id': produit.id }) }}" class="btn btn-outline-danger btn-sm rounded-pill px-4">Voir détails</a>
+										<a href="{{ path('app_add_panier', {'id': produit.id}) }}" class="btn btn-outline-danger btn-sm rounded-pill px-4">Ajouter au panier</a>
 									</div>
 								{% else %}
 									<p class="text-danger text-center">Rupture de stock</p>

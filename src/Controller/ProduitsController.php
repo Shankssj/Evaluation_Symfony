@@ -23,24 +23,41 @@ final class ProduitsController extends AbstractController
     }
 
     #[Route('/new', name: 'app_produits_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $produit = new Produits();
-        $form = $this->createForm(ProduitsType::class, $produit);
-        $form->handleRequest($request);
+public function new(Request $request, EntityManagerInterface $entityManager): Response
+{
+    $produit = new Produits();
+    $form = $this->createForm(ProduitsType::class, $produit);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($produit);
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
 
-            return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
+        /** @var UploadedFile $imageFile */
+        $imageFile = $form->get('imageFile')->getData();
+
+        if ($imageFile) {
+            $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+
+            $imageFile->move(
+                $this->getParameter('images_directory'),
+                $newFilename
+            );
+
+            // Enregistre le nom de fichier dans la BDD
+            $produit->setImageProduit($newFilename);
         }
 
-        return $this->render('produits/new.html.twig', [
-            'produit' => $produit,
-            'form' => $form,
-        ]);
+        $entityManager->persist($produit);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Produit créé avec succès !');
+        return $this->redirectToRoute('app_produits_index');
     }
+
+    return $this->render('produits/new.html.twig', [
+        'produit' => $produit,
+        'form' => $form,
+    ]);
+}
 
     #[Route('/{id}', name: 'app_produits_show', methods: ['GET'])]
     public function show(Produits $produit): Response
@@ -51,27 +68,43 @@ final class ProduitsController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_produits_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Produits $produit, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(ProduitsType::class, $produit);
-        $form->handleRequest($request);
+public function edit(Request $request, Produits $produit, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(ProduitsType::class, $produit);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+    if ($form->isSubmitted() && $form->isValid()) {
 
-            return $this->redirectToRoute('app_produits_index', [], Response::HTTP_SEE_OTHER);
+        /** @var UploadedFile $imageFile */
+        $imageFile = $form->get('imageFile')->getData();
+
+        if ($imageFile) {
+            $newFilename = uniqid() . '.' . $imageFile->guessExtension();
+
+            $imageFile->move(
+                $this->getParameter('images_directory'),
+                $newFilename
+            );
+
+            $produit->setImageProduit($newFilename);
         }
 
-        return $this->render('produits/edit.html.twig', [
-            'produit' => $produit,
-            'form' => $form,
-        ]);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Produit modifié avec succès !');
+        return $this->redirectToRoute('app_produits_index');
     }
+
+    return $this->render('produits/edit.html.twig', [
+        'produit' => $produit,
+        'form' => $form,
+    ]);
+}
 
     #[Route('/{id}', name: 'app_produits_delete', methods: ['POST'])]
     public function delete(Request $request, Produits $produit, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$produit->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $produit->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($produit);
             $entityManager->flush();
         }

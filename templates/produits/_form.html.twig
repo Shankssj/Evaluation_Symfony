@@ -1,4 +1,46 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="admin-form-container">
+
+	{{ form_start(form) }}
+
+	<h1>{{ title|default('Création') }}</h1>
+
+	<div class="form-group">
+		{{ form_label(form.nom_produit) }}
+		{{ form_widget(form.nom_produit) }}
+	</div>
+
+	<div class="form-group">
+		{{ form_label(form.description_produit) }}
+		{{ form_widget(form.description_produit) }}
+	</div>
+
+	<div class="form-group">
+		{{ form_label(form.stock) }}
+		{{ form_widget(form.stock) }}
+	</div>
+
+	<div class="form-group">
+		{{ form_label(form.prix_produit) }}
+		{{ form_widget(form.prix_produit) }}
+	</div>
+
+	{% if produit.imageProduit %}
+		<div class="mb-3">
+			<label>Aperçu :</label><br>
+			<img src="{{ asset('uploads/images/' ~ produit.imageProduit) }}" alt="Image produit" style="max-height:150px;">
+
+		</div>
+	{% endif %}
+
+	{{ form_row(form.imageFile) }}
+
+
+	<button>
+		{{ button_label|default('Enregistrer') }}
+	</button>
+
+	{{ form_end(form) }}
+
+</div>
+
+<a href="{{ path('app_produits_index') }}" class="admin-back-link">← Retour à la liste</a>
